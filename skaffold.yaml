@@ -1,0 +1,17 @@
+apiVersion: skaffold/v1beta14
+kind: Config
+build:
+  artifacts:
+    - image: originbenntou/e-kitchen-front
+      context: .
+      docker:
+        dockerfile: ./front/docker-local/Dockerfile
+    - image: originbenntou/e-kitchen-user
+      context: .
+      docker:
+        dockerfile: ./user/docker-local/Dockerfile
+deploy:
+  kubectl:
+    manifests:
+      - ./kubernetes/*
+
