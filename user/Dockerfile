@@ -16,6 +16,6 @@ RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go install $MAIN_PATH
 
 FROM alpine:latest
 ENV TZ Asia/Tokyo
-COPY --from=builder /go/bin/front /go/bin/front
+COPY --from=builder /go/bin/user /go/bin/user
 
 ENTRYPOINT ["/go/bin/user"]

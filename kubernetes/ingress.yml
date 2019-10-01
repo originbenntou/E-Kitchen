@@ -1,20 +1,13 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: ucwork.local
+  name: e-kitchen.local.ingress
   annotations:
     nginx.org/server-snippet: "proxy_ssl_verify off;"
 spec:
   rules:
-    - host: localhost
-      http:
+    - http:
         paths:
           - backend:
               serviceName: nginx
               servicePort: 8080
-#    - host: go.ucwork.local
-#      http:
-#        paths:
-#          - backend:
-#              serviceName: go
-#              servicePort: 8080
