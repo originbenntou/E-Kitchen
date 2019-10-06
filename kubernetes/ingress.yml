@@ -9,5 +9,5 @@ spec:
     - http:
         paths:
           - backend:
-              serviceName: nginx
+              serviceName: e-kitchen-front
               servicePort: 8080
