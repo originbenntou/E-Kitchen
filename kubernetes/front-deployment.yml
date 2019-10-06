@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: e-kitchen-service
+  name: e-kitchen-front
   labels:
-    app: nginx
+    app: front
 spec:
   ports:
     - port: 8080
   selector:
-    app: nginx
+    app: front
     tier: frontend
   type: LoadBalancer
 ---

@@ -12,5 +12,6 @@ type UserService struct {
 
 func (s *UserService) CreateUser(ctx context.Context, req *pbUser.CreateUserRequest) (*pbUser.CreateUserResponce, error) {
 	fmt.Println(ctx, req)
-	return nil,nil
+	fmt.Println("todoiteruyo!")
+	return nil, nil
 }

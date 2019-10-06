@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"github.com/originbenntou/E-Lunch/E-Kitchen/front/template"
+	"github.com/originbenntou/E-Kitchen/front/template"
 	"io"
 	"log"
 	"net/http"
