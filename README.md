@@ -22,15 +22,13 @@ E-Kitchen
 - docker
     - multi stage build
 - gorilla/mux
+- GORM
 
 ## Demo
 
 - クローンして `skaffold run` すればローカルで動きます！！
 
 ## VS. 
-
-- 参考ポジトリ
-    - https://github.com/vvatanabe/go-grpc-microservices
 
 ## Requirement & Install
 
