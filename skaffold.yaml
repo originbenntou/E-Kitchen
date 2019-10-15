@@ -6,10 +6,26 @@ build:
       context: .
       docker:
         dockerfile: ./front/docker-local/Dockerfile
+      sync:
+        manual:
+          - src: "front/*"
+            dest: "front"
     - image: originbenntou/e-kitchen-user
       context: .
       docker:
         dockerfile: ./user/docker-local/Dockerfile
+      sync:
+        manual:
+          - src: "user/*"
+            dest: "user"
+    - image: originbenntou/e-kitchen-mysql
+      context: .
+      docker:
+        dockerfile: ./mysql/Dockerfile
+      sync:
+        manual:
+          - src: "mysql/*"
+            dest: "mysql"
 deploy:
   kubectl:
     manifests:

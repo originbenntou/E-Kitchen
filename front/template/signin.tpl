@@ -1,6 +1,6 @@
 {{define "content"}}
 <section class="uk-margin-large-top uk-width-2-5@l uk-width-4-5 uk-margin-auto uk-margin uk-card uk-card-default uk-card-body uk-text-center">
-	<form action="/home" method="get">
+	<form action="/user-verify" method="post">
 		<div class="uk-margin">
 			<label for="mail">Email</label><br>
 			<div class="uk-width-4-5 uk-inline">

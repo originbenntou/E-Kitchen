@@ -18,10 +18,29 @@ message CreateUserRequest {
     bytes password = 2;
 }
 
-message CreateUserResponce {
+message CreateUserResponse {
     User user = 1;
 }
 
+message VerifyUserRequest {
+    string email = 1;
+    bytes password = 2;
+}
+
+message VerifyUserResponse {
+    User user = 1;
+}
+
+message FindUserRequest {
+    uint64 userId = 1;
+}
+
+message FindUserResponse {
+    string email = 1;
+}
+
 service UserService {
-    rpc CreateUser (CreateUserRequest) returns (CreateUserResponce);
+    rpc CreateUser (CreateUserRequest) returns (CreateUserResponse);
+    rpc VerifyUser (VerifyUserRequest) returns (VerifyUserResponse);
+    rpc FindUser (FindUserRequest) returns (FindUserResponse);
 }

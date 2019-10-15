@@ -36,4 +36,13 @@ spec:
           name: e-kitchen-user
           ports:
             - containerPort: 50051
-
+          env:
+            - name: DB_HOST
+              value: e-kitchen-mysql
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-pass
+                  key: password
+            - name: DB_NAME
+              value: e_kitchen

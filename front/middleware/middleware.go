@@ -1,6 +1,10 @@
 package middleware
 
 import (
+	"github.com/originbenntou/E-Kitchen/front/session"
+	"github.com/originbenntou/E-Kitchen/front/support"
+	pbUser "github.com/originbenntou/E-Kitchen/proto/user"
+
 	"log"
 	"net/http"
 	"time"
@@ -28,4 +32,37 @@ func Logging(next http.Handler) http.Handler {
 		}()
 		next.ServeHTTP(w, r)
 	})
+}
+
+func NewAuthentication(
+	userClient pbUser.UserServiceClient,
+	sessionStore session.Store) func(next http.HandlerFunc) http.HandlerFunc {
+	return func(next http.HandlerFunc) http.HandlerFunc {
+		return func(w http.ResponseWriter, r *http.Request) {
+			sessionID := session.GetSessionIDFromRequest(r)
+			// セッション有効ならユーザーID取得
+			v, ok := sessionStore.Get(sessionID)
+			if !ok {
+				http.Redirect(w, r, "/signin", http.StatusFound)
+				return
+			}
+			userID, ok := v.(uint64)
+			if !ok {
+				http.Redirect(w, r, "/signin", http.StatusFound)
+				return
+			}
+
+			ctx := r.Context()
+			resp, err := userClient.FindUser(ctx, &pbUser.FindUserRequest{
+				UserId: userID,
+			})
+			if err != nil {
+				http.Redirect(w, r, "/login", http.StatusFound)
+				return
+			}
+			// contextを介して他機能にユーザー情報を共有
+			ctx = support.AddUserToContext(ctx, resp.Email)
+			next.ServeHTTP(w, r.WithContext(ctx))
+		}
+	}
 }

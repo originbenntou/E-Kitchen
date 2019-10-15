@@ -1,6 +1,6 @@
 {{define "content"}}
 <section class="uk-margin-large-top uk-width-2-5@l uk-width-4-5 uk-margin-auto uk-margin uk-card uk-card-default uk-card-body uk-text-center">
-	<form action="/user-register" method="post">
+	<form action="/user-regist" method="post">
 		<fieldset class="uk-fieldset">
 
 			<legend class="uk-legend">ユーザー登録</legend>
