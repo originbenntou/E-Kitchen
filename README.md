@@ -8,7 +8,7 @@ E-Kitchen
 - E-Lunch（現在廃止中）から参照
     - https://github.com/originbenntou/E-Lunch
 - まだユーザー認証が完成した段階...
-    - issue
+    - https://github.com/originbenntou/E-Kitchen/issues 
 - 技術習得を目的にして開発
 
 ### 主な技術
@@ -27,8 +27,6 @@ E-Kitchen
 ## Demo
 
 - クローンして `skaffold run` すればローカルで動きます！！
-
-## VS. 
 
 ## Requirement & Install
 
@@ -65,6 +63,8 @@ $ kubectl get nodes
 ```
 
 ## Usage
+
+## VS. 
 
 ## Licence
 
