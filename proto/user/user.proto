@@ -5,6 +5,7 @@ package user;
 option go_package = "github.com/originbenntou/E-Kitchen/proto/user";
 
 import "google/protobuf/timestamp.proto";
+import "github.com/mwitkow/go-proto-validators/validator.proto";
 
 message User {
     uint64 id = 1;
@@ -14,8 +15,8 @@ message User {
 }
 
 message CreateUserRequest {
-    string email = 1;
-    bytes password = 2;
+    string email = 1 [(validator.field) = {msg_exists: true regex: "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$"}];
+    bytes password = 2 [(validator.field) = {msg_exists: true}];
 }
 
 message CreateUserResponse {
@@ -23,8 +24,8 @@ message CreateUserResponse {
 }
 
 message VerifyUserRequest {
-    string email = 1;
-    bytes password = 2;
+    string email = 1 [(validator.field) = {msg_exists: true regex: "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$"}];
+    bytes password = 2 [(validator.field) = {msg_exists: true}];
 }
 
 message VerifyUserResponse {
@@ -32,7 +33,7 @@ message VerifyUserResponse {
 }
 
 message FindUserRequest {
-    uint64 userId = 1;
+    uint64 userId = 1 [(validator.field) = {msg_exists: true int_gt: 1}];
 }
 
 message FindUserResponse {

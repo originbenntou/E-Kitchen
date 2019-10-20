@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/grpc-ecosystem/go-grpc-middleware"
+	"github.com/grpc-ecosystem/go-grpc-middleware/validator"
 	"google.golang.org/grpc"
 	"log"
 	"net"
@@ -11,7 +13,14 @@ import (
 const port = ":50051"
 
 func main() {
-	server := grpc.NewServer()
+	server := grpc.NewServer(
+		grpc.StreamInterceptor(grpc_middleware.ChainStreamServer(
+			grpc_validator.StreamServerInterceptor(),
+		)),
+		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
+			grpc_validator.UnaryServerInterceptor(),
+		)),
+	)
 	pbUser.RegisterUserServiceServer(server, &UserService{})
 
 	listener, err := net.Listen("tcp", port)
