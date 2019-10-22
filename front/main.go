@@ -37,6 +37,7 @@ func main() {
 	r.Path("/user-regist").Methods(http.MethodPost).HandlerFunc(fs.UserRegistHandler)
 	r.Path("/signout").Methods(http.MethodGet).HandlerFunc(auth(fs.SignoutHandler))
 	r.Path("/health-check").Methods(http.MethodGet).HandlerFunc(fs.HealthCheckHandler)
+	r.Path("/error").Methods(http.MethodGet).HandlerFunc(fs.ErrorHandler)
 
 	http.Handle("/", r)
 

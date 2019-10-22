@@ -7,7 +7,7 @@
 
 			<div class="uk-margin">
 				<label class="uk-form-label uk-text-left" for="form-stacked-text">E-mail</label>
-				<input class="uk-input" type="text" name="email">
+				<input class="uk-input" type="text" name="email" required>
 			</div>
 
 			<div class="uk-margin">

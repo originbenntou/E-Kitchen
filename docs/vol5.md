@@ -23,6 +23,11 @@ $ protoc -I=proto --go_out=plugins=grpc,paths=source_relative:./proto proto/user
 
 https://ucwork.hatenablog.com/entry/2019/02/27/205709
 
+```
+# よくやる
+$ kubectl create secret generic mysql-pass --from-literal=password=password
+```
+
 ### serviceの理解
 
 http://chidakiyo.hatenablog.com/entry/2018/09/10/Kubernetes_NodePort_vs_LoadBalancer_vs_Ingress%3F_When_should_I_use_what%3F_%28Kubernetes_NodePort_%E3%81%A8_LoadBalancer_%E3%81%A8_Ingress_%E3%81%AE%E3%81%A9%E3%82%8C%E3%82%92%E4%BD%BF%E3%81%86

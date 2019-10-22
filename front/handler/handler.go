@@ -3,11 +3,10 @@ package handler
 import (
 	"github.com/originbenntou/E-Kitchen/front/session"
 	"github.com/originbenntou/E-Kitchen/front/template"
+	pbUser "github.com/originbenntou/E-Kitchen/proto/user"
 	"io"
 	"log"
 	"net/http"
-
-	pbUser "github.com/originbenntou/E-Kitchen/proto/user"
 )
 
 type FrontServer struct {
@@ -34,6 +33,7 @@ func (s *FrontServer) UserVerifyHandler(w http.ResponseWriter, r *http.Request) 
 		Password: []byte(r.Form.Get("password")),
 	})
 	if err != nil {
+		log.Println(err)
 		http.Redirect(w, r, "/signin", http.StatusFound)
 		return
 	}
@@ -55,7 +55,7 @@ func (s *FrontServer) UserRegistHandler(w http.ResponseWriter, r *http.Request) 
 	})
 	if err != nil {
 		log.Println(err)
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		http.Redirect(w, r, "/error", http.StatusFound)
 		return
 	}
 
@@ -78,4 +78,8 @@ func (s *FrontServer) HealthCheckHandler(w http.ResponseWriter, r *http.Request)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	_, _ = io.WriteString(w, `{"alive": true}`)
+}
+
+func (s *FrontServer) ErrorHandler(w http.ResponseWriter, r *http.Request) {
+	template.Render(w, "error", &Content{PageName: "error"})
 }

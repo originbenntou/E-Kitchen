@@ -14,6 +14,7 @@ COPY . $WORK_DIR
 
 RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go install $MAIN_PATH
 
+COPY front/static /static
 COPY front/template /template
 
 ENTRYPOINT ["/go/bin/front"]

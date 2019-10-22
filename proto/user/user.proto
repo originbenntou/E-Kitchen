@@ -15,8 +15,8 @@ message User {
 }
 
 message CreateUserRequest {
-    string email = 1 [(validator.field) = {msg_exists: true regex: "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$"}];
-    bytes password = 2 [(validator.field) = {msg_exists: true}];
+    string email = 1 [(validator.field) = {string_not_empty: true regex: "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$"}];
+    bytes password = 2 [(validator.field) = {string_not_empty: true length_gt:7 length_lt:33}];
 }
 
 message CreateUserResponse {
@@ -24,8 +24,8 @@ message CreateUserResponse {
 }
 
 message VerifyUserRequest {
-    string email = 1 [(validator.field) = {msg_exists: true regex: "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$"}];
-    bytes password = 2 [(validator.field) = {msg_exists: true}];
+    string email = 1 [(validator.field) = {string_not_empty: true regex: "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$"}];
+    bytes password = 2 [(validator.field) = {string_not_empty: true length_gt:7 length_lt:33}];
 }
 
 message VerifyUserResponse {
@@ -33,7 +33,7 @@ message VerifyUserResponse {
 }
 
 message FindUserRequest {
-    uint64 userId = 1 [(validator.field) = {msg_exists: true int_gt: 1}];
+    uint64 userId = 1 [(validator.field) = {string_not_empty: true int_gt: 1}];
 }
 
 message FindUserResponse {

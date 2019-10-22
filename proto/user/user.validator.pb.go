@@ -33,6 +33,15 @@ func (this *CreateUserRequest) Validate() error {
 	if !_regex_CreateUserRequest_Email.MatchString(this.Email) {
 		return github_com_mwitkow_go_proto_validators.FieldError("Email", fmt.Errorf(`value '%v' must be a string conforming to regex "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$"`, this.Email))
 	}
+	if this.Email == "" {
+		return github_com_mwitkow_go_proto_validators.FieldError("Email", fmt.Errorf(`value '%v' must not be an empty string`, this.Email))
+	}
+	if !(len(this.Password) > 7) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Password", fmt.Errorf(`value '%v' must have a length greater than '7'`, this.Password))
+	}
+	if !(len(this.Password) < 33) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Password", fmt.Errorf(`value '%v' must have a length smaller than '33'`, this.Password))
+	}
 	return nil
 }
 func (this *CreateUserResponse) Validate() error {
@@ -49,6 +58,15 @@ var _regex_VerifyUserRequest_Email = regexp.MustCompile(`^\w+([-+.]\w+)*@\w+([-.
 func (this *VerifyUserRequest) Validate() error {
 	if !_regex_VerifyUserRequest_Email.MatchString(this.Email) {
 		return github_com_mwitkow_go_proto_validators.FieldError("Email", fmt.Errorf(`value '%v' must be a string conforming to regex "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$"`, this.Email))
+	}
+	if this.Email == "" {
+		return github_com_mwitkow_go_proto_validators.FieldError("Email", fmt.Errorf(`value '%v' must not be an empty string`, this.Email))
+	}
+	if !(len(this.Password) > 7) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Password", fmt.Errorf(`value '%v' must have a length greater than '7'`, this.Password))
+	}
+	if !(len(this.Password) < 33) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Password", fmt.Errorf(`value '%v' must have a length smaller than '33'`, this.Password))
 	}
 	return nil
 }
