@@ -1,0 +1,16 @@
+{
+  "name": "front",
+  "version": "1.0.0",
+  "description": "e-kitchen-front",
+  "main": "index.js",
+  "repository": "https://github.com/originbenntou/E-Kitchen",
+  "author": "mototsuka",
+  "license": "MIT",
+  "dependencies": {
+    "vue": "^2.6.10",
+    "vuelidate": "^0.7.4"
+  },
+  "browser": {
+    "vue": "vue/dist/vue.common.js"
+  }
+}

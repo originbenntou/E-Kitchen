@@ -39,9 +39,11 @@ func main() {
 	r.Path("/health-check").Methods(http.MethodGet).HandlerFunc(fs.HealthCheckHandler)
 	r.Path("/error").Methods(http.MethodGet).HandlerFunc(fs.ErrorHandler)
 
+	static := http.StripPrefix("/static", http.FileServer(http.Dir("front/static")))
+	r.PathPrefix("/static/").Handler(static)
+
 	http.Handle("/", r)
 
-	log.Println("start server on port", port)
 	log.Fatal(http.ListenAndServe(port, nil))
 }
 

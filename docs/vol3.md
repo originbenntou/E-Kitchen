@@ -41,6 +41,6 @@ $ curl http://`minikube ip`/home -H 'Host: nginx.ucwork.local'
 # どのk8sクラスタを利用するか決める 今回はminikube
 $ kubectl config get-contexts
 $ kubectl config use context minikube
-
+~~~~
 $ kubectl exec -it nginx-c6895797b-wwkbl sh --kubeconfig ~/.kube/config
 ```

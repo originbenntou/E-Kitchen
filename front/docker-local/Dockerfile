@@ -14,6 +14,14 @@ COPY . $WORK_DIR
 
 RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go install $MAIN_PATH
 
+# vue.js用
+## FIXME: webpackでvueをコンパイルできるようにする
+## FIXME: CDNで代用するのでpackage.jsonは休止
+#RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+#RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+#RUN apt-get -y update && apt-get -y install yarn
+#RUN yarn install
+
 COPY front/static /static
 COPY front/template /template
 
