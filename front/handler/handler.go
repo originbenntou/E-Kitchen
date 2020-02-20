@@ -1,8 +1,10 @@
 package handler
 
 import (
+	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/originbenntou/E-Kitchen/front/session"
 	"github.com/originbenntou/E-Kitchen/front/template"
+	pbShop "github.com/originbenntou/E-Kitchen/proto/shop"
 	pbUser "github.com/originbenntou/E-Kitchen/proto/user"
 	"io"
 	"log"
@@ -11,6 +13,7 @@ import (
 
 type FrontServer struct {
 	UserClient   pbUser.UserServiceClient
+	ShopClient   pbShop.ShopServiceClient
 	SessionStore session.Store
 }
 
@@ -19,6 +22,10 @@ type Content struct {
 }
 
 func (s *FrontServer) IndexHandler(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+	var in empty.Empty
+
+	log.Println(s.ShopClient.FindShops(r.Context(), &in))
 	template.Render(w, "index", &Content{PageName: "INDEX"})
 }
 

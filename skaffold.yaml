@@ -18,6 +18,14 @@ build:
         manual:
           - src: "user/*"
             dest: "user"
+    - image: originbenntou/e-kitchen-shop
+      context: .
+      docker:
+        dockerfile: ./shop/docker-local/Dockerfile
+      sync:
+        manual:
+          - src: "shop/*"
+            dest: "shop"
     - image: originbenntou/e-kitchen-mysql
       context: .
       docker:

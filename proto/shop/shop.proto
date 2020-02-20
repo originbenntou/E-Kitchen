@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package shop;
+
+option go_package = "github.com/originbenntou/E-Kitchen/proto/shop";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+import "github.com/mwitkow/go-proto-validators/validator.proto";
+
+enum Status {
+    UNKNOWN = 0;
+    WAITING = 1;
+    WORKING = 2;
+    COMPLETED = 3;
+}
+
+message Shop {
+    uint64 id = 1;
+    string name = 2;
+    Status status = 3;
+    uint64 category_id = 4;
+    uint64 user_id = 5;
+    google.protobuf.Timestamp created_at = 6;
+    google.protobuf.Timestamp updated_at = 7;
+}
+
+message FindShopsResponse {
+    repeated Shop shops = 1;
+}
+
+service ShopService {
+    rpc FindShops (google.protobuf.Empty) returns (FindShopsResponse);
+}

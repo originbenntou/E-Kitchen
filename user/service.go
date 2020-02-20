@@ -13,9 +13,10 @@ import (
 )
 
 type UserService struct {
+	db *db.GormMutex
 }
 
-type Users struct {
+type User struct {
 	Id        int       `json:"id,string"`
 	Email     string    `json:"name"`
 	Password  string    `json:"password"`
@@ -23,8 +24,20 @@ type Users struct {
 	UpdatedAt time.Time `json:"updated,string"`
 }
 
+func newUserGormMutex() *db.GormMutex {
+	return &db.GormMutex{
+		// FIXME: ConfigMap,Secretへ移行
+		DBMS:   "mysql",
+		USER:   "root",
+		PASS:   "password",
+		DBHOST: "e-kitchen-mysql:3306",
+		DBNAME: "e_kitchen",
+		OPTION: "charset=utf8&parseTime=True",
+	}
+}
+
 func (s *UserService) VerifyUser(ctx context.Context, req *pbUser.VerifyUserRequest) (*pbUser.VerifyUserResponse, error) {
-	user, errList := getUser(req.Email)
+	user, errList := s.getUser(req.Email)
 	if len(errList) > 0 {
 		for _, err := range errList {
 			log.Printf("verify user failed: %s", err)
@@ -61,7 +74,7 @@ func (s *UserService) CreateUser(ctx context.Context, req *pbUser.CreateUserRequ
 		CreatedAt:    ptypes.TimestampNow(),
 	}
 
-	exist, errList := existUser(newUser.Email)
+	exist, errList := s.existUser(newUser.Email)
 	if len(errList) > 0 {
 		for _, err := range errList {
 			log.Printf("create user failed: %s", err)
@@ -72,7 +85,7 @@ func (s *UserService) CreateUser(ctx context.Context, req *pbUser.CreateUserRequ
 		return nil, status.Error(codes.AlreadyExists, "This User Already Exists")
 	}
 
-	if errList := createUser(newUser); len(errList) > 0 {
+	if errList := s.createUser(newUser); len(errList) > 0 {
 		for _, err := range errList {
 			log.Printf("create user failed: %s", err)
 		}
@@ -80,7 +93,7 @@ func (s *UserService) CreateUser(ctx context.Context, req *pbUser.CreateUserRequ
 	}
 
 	// sessionIDセット
-	newUser.Id = getId(newUser.Email)
+	newUser.Id = s.getId(newUser.Email)
 	if newUser.Id == 0 {
 		return nil, status.Error(codes.Internal, "Server Error")
 	}
@@ -89,7 +102,7 @@ func (s *UserService) CreateUser(ctx context.Context, req *pbUser.CreateUserRequ
 }
 
 func (s *UserService) FindUser(ctx context.Context, req *pbUser.FindUserRequest) (*pbUser.FindUserResponse, error) {
-	userEmail, err := findUser(req.UserId)
+	userEmail, err := s.findUser(req.UserId)
 	if err != nil {
 		return nil, status.Error(codes.NotFound, "User is not Found")
 	}
@@ -97,24 +110,24 @@ func (s *UserService) FindUser(ctx context.Context, req *pbUser.FindUserRequest)
 	return &pbUser.FindUserResponse{Email: userEmail}, nil
 }
 
-func createUser(user *pbUser.User) []error {
+func (s *UserService) createUser(user *pbUser.User) []error {
 	now, _ := ptypes.Timestamp(user.CreatedAt)
 	jst, _ := time.LoadLocation("Asia/Tokyo")
 
-	newUser := new(Users)
+	newUser := new(User)
 	newUser.Email = user.Email
 	newUser.Password = string(user.PasswordHash)
 	newUser.CreatedAt = now.In(jst)
 	newUser.UpdatedAt = now.In(jst)
 
-	result := db.Insert(newUser)
+	result := s.db.Insert(newUser)
 
 	return result.GetErrors()
 }
 
-func existUser(email string) (bool, []error) {
-	var u Users
-	r, c := db.Count(&u, "email", email)
+func (s *UserService) existUser(email string) (bool, []error) {
+	var m User
+	r, c := s.db.Count(&m, "email", email)
 
 	if err := r.GetErrors(); len(err) > 0 {
 		return false, err
@@ -123,29 +136,29 @@ func existUser(email string) (bool, []error) {
 	return c > 0, nil
 }
 
-func getId(email string) uint64 {
-	var u Users
-	if err := db.Select(&u, "email", email).GetErrors(); len(err) > 0 {
+func (s *UserService) getId(email string) uint64 {
+	var m User
+	if err := s.db.Select(&m, "email", email).GetErrors(); len(err) > 0 {
 		return 0
 	}
 
-	return uint64(u.Id)
+	return uint64(m.Id)
 }
 
-func getUser(email string) (Users, []error) {
-	var u Users
-	if err := db.Select(&u, "email", email).GetErrors(); len(err) > 0 {
-		return Users{}, err
+func (s *UserService) getUser(email string) (User, []error) {
+	var m User
+	if err := s.db.Select(&m, "email", email).GetErrors(); len(err) > 0 {
+		return User{}, err
 	}
 
-	return u, nil
+	return m, nil
 }
 
-func findUser(id uint64) (string, []error) {
-	var u Users
-	if err := db.Select(&u, "id", string(id)).GetErrors(); len(err) > 0 {
+func (s *UserService) findUser(id uint64) (string, []error) {
+	var m User
+	if err := s.db.Select(&m, "id", string(id)).GetErrors(); len(err) > 0 {
 		return "", err
 	}
 
-	return u.Email, nil
+	return m.Email, nil
 }

@@ -5,62 +5,81 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"log"
 	"runtime"
+	"sync"
 )
 
-func connect(funcName string) *gorm.DB {
-	// FIXME: ConfigMap,Secretへ移行
-	DBMS := "mysql"
-	USER := "root"
-	PASS := "password"
-	DBHOST := "e-kitchen-mysql:3306"
-	DBNAME := "e_kitchen"
-	OPTION := "charset=utf8&parseTime=True"
+type GormMutex struct {
+	lock    sync.RWMutex
+	counter uint64
 
-	CONNECT := USER + ":" + PASS + "@tcp(" + DBHOST + ")/" + DBNAME + "?" + OPTION
+	DBMS   string
+	USER   string
+	PASS   string
+	DBHOST string
+	DBNAME string
+	OPTION string
+}
 
-	db, err := gorm.Open(DBMS, CONNECT)
+func (g *GormMutex) connect() *gorm.DB {
+	CONNECT := g.USER + ":" + g.PASS + "@tcp(" + g.DBHOST + ")/" + g.DBNAME + "?" + g.OPTION
+
+	db, err := gorm.Open(g.DBMS, CONNECT)
 	if err != nil {
 		log.Fatalln(err.Error())
 	}
 
-	log.Printf("MySQL Connect Success: %s", funcName)
-
 	return db
 }
 
-func Insert(i interface{}) *gorm.DB {
+func (g *GormMutex) Insert(i interface{}) *gorm.DB {
 	pt, _, _, ok := runtime.Caller(0)
 	if !ok {
 		log.Println("trace failed")
 	}
 
-	db := connect(runtime.FuncForPC(pt).Name())
+	db := g.connect()
+	log.Printf("MySQL Connect Success: %s", runtime.FuncForPC(pt).Name())
 	defer db.Close()
 
 	return db.Create(i)
 }
 
-func Select(table interface{}, column string, value string) *gorm.DB {
+func (g *GormMutex) Select(table interface{}, column string, value string) *gorm.DB {
 	pt, _, _, ok := runtime.Caller(0)
 	if !ok {
 		log.Println("trace failed")
 	}
 
-	db := connect(runtime.FuncForPC(pt).Name())
+	db := g.connect()
+	log.Printf("MySQL Connect Success: %s", runtime.FuncForPC(pt).Name())
 	defer db.Close()
 
 	return db.Find(table).Where(column+"=?", value)
 }
 
-func Count(table interface{}, column string, value string) (*gorm.DB, int) {
+func (g *GormMutex) Count(table interface{}, column string, value string) (*gorm.DB, int) {
 	pt, _, _, ok := runtime.Caller(0)
 	if !ok {
 		log.Println("trace failed")
 	}
 
-	db := connect(runtime.FuncForPC(pt).Name())
+	db := g.connect()
+	log.Printf("MySQL Connect Success: %s", runtime.FuncForPC(pt).Name())
 	defer db.Close()
 
 	var c int
 	return db.Find(table).Where(column+"=?", value).Count(&c), c
+}
+
+func (g *GormMutex) SelectAll(table interface{}) *gorm.DB {
+	pt, _, _, ok := runtime.Caller(0)
+	if !ok {
+		log.Println("trace failed")
+	}
+
+	db := g.connect()
+	log.Printf("MySQL Connect Success: %s", runtime.FuncForPC(pt).Name())
+	defer db.Close()
+
+	return db.Find(table)
 }

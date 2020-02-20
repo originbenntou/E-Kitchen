@@ -1,13 +1,12 @@
 package main
 
 import (
-	"github.com/grpc-ecosystem/go-grpc-middleware"
-	"github.com/grpc-ecosystem/go-grpc-middleware/validator"
+	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
+	grpc_validator "github.com/grpc-ecosystem/go-grpc-middleware/validator"
+	pbShop "github.com/originbenntou/E-Kitchen/proto/shop"
 	"google.golang.org/grpc"
 	"log"
 	"net"
-
-	pbUser "github.com/originbenntou/E-Kitchen/proto/user"
 )
 
 const port = ":50051"
@@ -21,8 +20,8 @@ func main() {
 			grpc_validator.UnaryServerInterceptor(),
 		)),
 	)
-	pbUser.RegisterUserServiceServer(server, &UserService{
-		db: newUserGormMutex(),
+	pbShop.RegisterShopServiceServer(server, &ShopService{
+		db: newShopGormMutex(),
 	})
 
 	listener, err := net.Listen("tcp", port)
