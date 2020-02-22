@@ -33,7 +33,7 @@ new Vue({
     },
     methods: {
         submit: () => {
-            alert('ログイン成功！')
-        }
+            // alert('ログイン成功！')
+        },
     }
 })

@@ -1,0 +1,3 @@
+```
+$ mysql -uroot -ppassword
+```

@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"fmt"
+	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/empty"
 	pbShop "github.com/originbenntou/E-Kitchen/proto/shop"
 	"github.com/originbenntou/E-Kitchen/shared/db"
@@ -14,13 +14,13 @@ type ShopService struct {
 }
 
 type Shop struct {
-	Id         int           `json:"id"`
+	Id         uint64        `json:"id"`
 	Name       string        `json:"name"`
 	Status     pbShop.Status `json:"status"`
 	CategoryId uint64        `json:"category_id"`
 	UserId     uint64        `json:"user_id"`
-	CreatedAt  time.Time     `json:"created"`
-	UpdatedAt  time.Time     `json:"updated"`
+	CreatedAt  time.Time     `json:"created_at"`
+	UpdatedAt  time.Time     `json:"updated_at"`
 }
 
 func newShopGormMutex() *db.GormMutex {
@@ -36,12 +36,25 @@ func newShopGormMutex() *db.GormMutex {
 }
 
 func (s *ShopService) FindShops(ctx context.Context, in *empty.Empty) (*pbShop.FindShopsResponse, error) {
-	var ss []*pbShop.Shop
+	var ss []*Shop
 	if err := s.db.SelectAll(&ss).GetErrors(); len(err) > 0 {
 		return &pbShop.FindShopsResponse{}, nil
 	}
 
-	fmt.Println("ここ", ss)
+	var pbSs []*pbShop.Shop
+	for _, shop := range ss {
+		created, _ := ptypes.TimestampProto(shop.CreatedAt)
+		updated, _ := ptypes.TimestampProto(shop.UpdatedAt)
+		pbSs = append(pbSs, &pbShop.Shop{
+			Id:         shop.Id,
+			Name:       shop.Name,
+			Status:     shop.Status,
+			CategoryId: shop.CategoryId,
+			UserId:     shop.UserId,
+			CreatedAt:  created,
+			UpdatedAt:  updated,
+		})
+	}
 
-	return &pbShop.FindShopsResponse{Shops: ss}, nil
+	return &pbShop.FindShopsResponse{Shops: pbSs}, nil
 }

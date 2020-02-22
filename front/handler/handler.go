@@ -19,14 +19,21 @@ type FrontServer struct {
 
 type Content struct {
 	PageName string
+	Shops    []*pbShop.Shop
 }
 
 func (s *FrontServer) IndexHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	var in empty.Empty
 
-	log.Println(s.ShopClient.FindShops(r.Context(), &in))
-	template.Render(w, "index", &Content{PageName: "INDEX"})
+	res, err := s.ShopClient.FindShops(r.Context(), &in)
+	if err != nil {
+		log.Println(err)
+		http.Redirect(w, r, "/error", http.StatusFound)
+		return
+	}
+
+	template.Render(w, "index", &Content{PageName: "INDEX", Shops: res.Shops})
 }
 
 func (s *FrontServer) SigninHandler(w http.ResponseWriter, r *http.Request) {
