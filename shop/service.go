@@ -6,6 +6,9 @@ import (
 	"github.com/golang/protobuf/ptypes/empty"
 	pbShop "github.com/originbenntou/E-Kitchen/proto/shop"
 	"github.com/originbenntou/E-Kitchen/shared/db"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+	"log"
 	"time"
 )
 
@@ -37,8 +40,11 @@ func newShopGormMutex() *db.GormMutex {
 
 func (s *ShopService) FindShops(ctx context.Context, in *empty.Empty) (*pbShop.FindShopsResponse, error) {
 	var ss []*Shop
-	if err := s.db.SelectAll(&ss).GetErrors(); len(err) > 0 {
-		return &pbShop.FindShopsResponse{}, nil
+	if errList := s.db.SelectAll(&ss).GetErrors(); len(errList) > 0 {
+		for _, err := range errList {
+			log.Printf("find shops failed: %s", err)
+		}
+		return nil, status.Error(codes.Internal, "Server Error")
 	}
 
 	var pbSs []*pbShop.Shop
@@ -57,4 +63,15 @@ func (s *ShopService) FindShops(ctx context.Context, in *empty.Empty) (*pbShop.F
 	}
 
 	return &pbShop.FindShopsResponse{Shops: pbSs}, nil
+}
+
+func (s *ShopService) UpdateShop(ctx context.Context, req *pbShop.UpdateShopRequest) (*pbShop.UpdateShopResponse, error) {
+	if errList := s.db.Update(req.Shop).GetErrors(); len(errList) > 0 {
+		for _, err := range errList {
+			log.Printf("update shop failed: %s", err)
+		}
+		return &pbShop.UpdateShopResponse{Success: false}, status.Error(codes.Internal, "Server Error")
+	}
+
+	return &pbShop.UpdateShopResponse{Success: true}, nil
 }

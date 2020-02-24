@@ -83,3 +83,16 @@ func (g *GormMutex) SelectAll(table interface{}) *gorm.DB {
 
 	return db.Find(table)
 }
+
+func (g *GormMutex) Update(table interface{}) *gorm.DB {
+	pt, _, _, ok := runtime.Caller(0)
+	if !ok {
+		log.Println("trace failed")
+	}
+
+	db := g.connect()
+	log.Printf("MySQL Connect Success: %s", runtime.FuncForPC(pt).Name())
+	defer db.Close()
+
+	return db.Save(table)
+}

@@ -10,10 +10,9 @@ import "google/protobuf/empty.proto";
 import "github.com/mwitkow/go-proto-validators/validator.proto";
 
 enum Status {
-    UNKNOWN = 0;
-    WAITING = 1;
-    WORKING = 2;
-    COMPLETED = 3;
+    PUBLIC  = 0;
+    PRIVATE = 1;
+    DELETED = 2;
 }
 
 message Shop {
@@ -30,6 +29,33 @@ message FindShopsResponse {
     repeated Shop shops = 1;
 }
 
+//message CreateShopRequest {
+//    Shop shop = 1;
+//}
+//
+//message CreateShopResponse {
+//    bool success = 1;
+//}
+
+message UpdateShopRequest {
+    Shop shop = 1;
+}
+
+message UpdateShopResponse {
+    bool success = 1;
+}
+
+//message DeleteShopRequest {
+//    uint64 id = 1;
+//}
+//
+//message DeleteShopResponse {
+//    bool success = 1;
+//}
+
 service ShopService {
     rpc FindShops (google.protobuf.Empty) returns (FindShopsResponse);
+//    rpc CreateShop (CreateShopRequest) returns (CreateShopResponse);
+    rpc UpdateShop (UpdateShopRequest) returns (UpdateShopResponse);
+//    rpc DeleteShop (DeleteShopRequest) returns (DeleteShopResponse);
 }
