@@ -17,13 +17,13 @@ type ShopService struct {
 }
 
 type Shop struct {
-	Id         uint64        `json:"id"`
-	Name       string        `json:"name"`
-	Status     pbShop.Status `json:"status"`
-	CategoryId uint64        `json:"category_id"`
-	UserId     uint64        `json:"user_id"`
-	CreatedAt  time.Time     `json:"created_at"`
-	UpdatedAt  time.Time     `json:"updated_at"`
+	Id         uint64    `json:"id"`
+	Name       string    `json:"name"`
+	Status     uint64    `json:"status"`
+	CategoryId uint64    `json:"category_id"`
+	UserId     uint64    `json:"user_id"`
+	CreatedAt  time.Time `json:"created_at"`
+	UpdatedAt  time.Time `json:"updated_at"`
 }
 
 func newShopGormMutex() *db.GormMutex {
@@ -54,7 +54,7 @@ func (s *ShopService) FindShops(ctx context.Context, in *empty.Empty) (*pbShop.F
 		pbSs = append(pbSs, &pbShop.Shop{
 			Id:         shop.Id,
 			Name:       shop.Name,
-			Status:     shop.Status,
+			Status:     pbShop.Status(shop.Status),
 			CategoryId: shop.CategoryId,
 			UserId:     shop.UserId,
 			CreatedAt:  created,
@@ -66,7 +66,15 @@ func (s *ShopService) FindShops(ctx context.Context, in *empty.Empty) (*pbShop.F
 }
 
 func (s *ShopService) UpdateShop(ctx context.Context, req *pbShop.UpdateShopRequest) (*pbShop.UpdateShopResponse, error) {
-	if errList := s.db.Update(req.Shop).GetErrors(); len(errList) > 0 {
+	if errList := s.db.Update(&Shop{
+		Id:         req.Shop.Id,
+		Name:       req.Shop.Name,
+		Status:     uint64(pbShop.Status_value[req.Shop.Status.String()]),
+		CategoryId: req.Shop.CategoryId,
+		UserId:     req.Shop.UserId,
+		CreatedAt:  time.Now(),
+		UpdatedAt:  time.Now(),
+	}).GetErrors(); len(errList) > 0 {
 		for _, err := range errList {
 			log.Printf("update shop failed: %s", err)
 		}
@@ -74,4 +82,18 @@ func (s *ShopService) UpdateShop(ctx context.Context, req *pbShop.UpdateShopRequ
 	}
 
 	return &pbShop.UpdateShopResponse{Success: true}, nil
+}
+
+func (s *ShopService) DeleteShop(ctx context.Context, req *pbShop.DeleteShopRequest) (*pbShop.DeleteShopResponse, error) {
+	// 論理削除
+	if errList := s.db.LogicalDelete(&Shop{
+		Id: req.Id,
+	}, uint64(pbShop.Status_value["DELETED"])).GetErrors(); len(errList) > 0 {
+		for _, err := range errList {
+			log.Printf("delete shop failed: %s", err)
+		}
+		return &pbShop.DeleteShopResponse{Success: false}, status.Error(codes.Internal, "Server Error")
+	}
+
+	return &pbShop.DeleteShopResponse{Success: true}, nil
 }

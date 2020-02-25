@@ -31,7 +31,7 @@ func (g *GormMutex) connect() *gorm.DB {
 	return db
 }
 
-func (g *GormMutex) Insert(i interface{}) *gorm.DB {
+func (g *GormMutex) Insert(model interface{}) *gorm.DB {
 	pt, _, _, ok := runtime.Caller(0)
 	if !ok {
 		log.Println("trace failed")
@@ -41,10 +41,10 @@ func (g *GormMutex) Insert(i interface{}) *gorm.DB {
 	log.Printf("MySQL Connect Success: %s", runtime.FuncForPC(pt).Name())
 	defer db.Close()
 
-	return db.Create(i)
+	return db.Create(model)
 }
 
-func (g *GormMutex) Select(table interface{}, column string, value string) *gorm.DB {
+func (g *GormMutex) Select(model interface{}, column string, value string) *gorm.DB {
 	pt, _, _, ok := runtime.Caller(0)
 	if !ok {
 		log.Println("trace failed")
@@ -54,10 +54,10 @@ func (g *GormMutex) Select(table interface{}, column string, value string) *gorm
 	log.Printf("MySQL Connect Success: %s", runtime.FuncForPC(pt).Name())
 	defer db.Close()
 
-	return db.Find(table).Where(column+"=?", value)
+	return db.Find(model).Where(column+"=?", value)
 }
 
-func (g *GormMutex) Count(table interface{}, column string, value string) (*gorm.DB, int) {
+func (g *GormMutex) Count(model interface{}, column string, value string) (*gorm.DB, int) {
 	pt, _, _, ok := runtime.Caller(0)
 	if !ok {
 		log.Println("trace failed")
@@ -68,10 +68,10 @@ func (g *GormMutex) Count(table interface{}, column string, value string) (*gorm
 	defer db.Close()
 
 	var c int
-	return db.Find(table).Where(column+"=?", value).Count(&c), c
+	return db.Find(model).Where(column+"=?", value).Count(&c), c
 }
 
-func (g *GormMutex) SelectAll(table interface{}) *gorm.DB {
+func (g *GormMutex) SelectAll(model interface{}) *gorm.DB {
 	pt, _, _, ok := runtime.Caller(0)
 	if !ok {
 		log.Println("trace failed")
@@ -81,10 +81,10 @@ func (g *GormMutex) SelectAll(table interface{}) *gorm.DB {
 	log.Printf("MySQL Connect Success: %s", runtime.FuncForPC(pt).Name())
 	defer db.Close()
 
-	return db.Find(table)
+	return db.Find(model)
 }
 
-func (g *GormMutex) Update(table interface{}) *gorm.DB {
+func (g *GormMutex) Update(model interface{}) *gorm.DB {
 	pt, _, _, ok := runtime.Caller(0)
 	if !ok {
 		log.Println("trace failed")
@@ -94,5 +94,34 @@ func (g *GormMutex) Update(table interface{}) *gorm.DB {
 	log.Printf("MySQL Connect Success: %s", runtime.FuncForPC(pt).Name())
 	defer db.Close()
 
-	return db.Save(table)
+	db.Model(model).Updates(model)
+	db.Save(model)
+
+	return db.Save(model)
+}
+
+func (g *GormMutex) LogicalDelete(model interface{}, status uint64) *gorm.DB {
+	pt, _, _, ok := runtime.Caller(0)
+	if !ok {
+		log.Println("trace failed")
+	}
+
+	db := g.connect()
+	log.Printf("MySQL Connect Success: %s", runtime.FuncForPC(pt).Name())
+	defer db.Close()
+
+	return db.Model(model).Update("status", status)
+}
+
+func (g *GormMutex) Delete(model interface{}) *gorm.DB {
+	pt, _, _, ok := runtime.Caller(0)
+	if !ok {
+		log.Println("trace failed")
+	}
+
+	db := g.connect()
+	log.Printf("MySQL Connect Success: %s", runtime.FuncForPC(pt).Name())
+	defer db.Close()
+
+	return db.Delete(model)
 }

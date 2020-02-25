@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/originbenntou/E-Kitchen/front/session"
 	"github.com/originbenntou/E-Kitchen/front/template"
@@ -10,6 +9,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 type FrontServer struct {
@@ -39,12 +39,17 @@ func (s *FrontServer) IndexHandler(w http.ResponseWriter, r *http.Request) {
 
 func (s *FrontServer) EditShopHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
-	fmt.Println(r.Form.Get("Name"), r.Form.Get("Status"))
+
+	id, _ := strconv.ParseUint(r.Form.Get("Id"), 10, 64)
+	status, _ := strconv.Atoi(r.Form.Get("Status"))
 
 	resp, err := s.ShopClient.UpdateShop(r.Context(), &pbShop.UpdateShopRequest{
 		Shop: &pbShop.Shop{
-			Name:   r.Form.Get("Name"),
-			Status: pbShop.Status(pbShop.Status_value[r.Form.Get("Status")]),
+			Id:         id,
+			Name:       r.Form.Get("Name"),
+			Status:     pbShop.Status(status),
+			CategoryId: 1,
+			UserId:     1,
 		},
 	})
 	if resp.Success == false || err != nil {
@@ -54,6 +59,24 @@ func (s *FrontServer) EditShopHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.Redirect(w, r, "/", http.StatusFound)
+}
+
+func (s *FrontServer) DeleteShopHandler(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+
+	id, _ := strconv.ParseUint(r.Form.Get("Id"), 10, 64)
+
+	resp, err := s.ShopClient.DeleteShop(r.Context(), &pbShop.DeleteShopRequest{
+		Id: id,
+	})
+	if resp.Success == false || err != nil {
+		log.Println(err)
+		http.Redirect(w, r, "/error", http.StatusFound)
+		return
+	}
+
+	http.Redirect(w, r, "/", http.StatusFound)
+
 }
 
 func (s *FrontServer) SigninHandler(w http.ResponseWriter, r *http.Request) {

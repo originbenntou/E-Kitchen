@@ -8,8 +8,8 @@
 		<th>Status</th>
 		<th>CategoryId</th>
 		<th>UserId</th>
-		<th>CreatedAt</th>
-		<th>UpdatedAt</th>
+		<th>Created_At</th>
+		<th>Updated_At</th>
 		<th></th>
 	</tr>
 	</thead>
@@ -42,6 +42,7 @@
 			<div class="uk-modal-header">
 				<h2 class="uk-modal-title">Edit {{$v.Name}}</h2>
 			</div>
+			<input class="uk-input" id="form-stacked-text-{{$v.Id}}" type="hidden" name="Id" value="{{$v.Id}}">
 			<div class="uk-modal-body" uk-overflow-auto>
 				<div class="uk-margin">
 					<label class="uk-form-label" for="form-stacked-text-{{$v.Id}}">Name</label>
@@ -72,7 +73,7 @@
 			</div>
 			<div class="uk-modal-footer uk-text-right">
 				<input class="uk-button uk-button-default uk-modal-close" type="button" value="Cancel">
-				<input class="uk-button uk-button-primary" type="submit" value="Save">
+				<input class="uk-button uk-button-primary" type="submit" value="Update">
 			</div>
 		</form>
 	</div>
@@ -81,6 +82,26 @@
 <!-- Modal Edit end -->
 
 <!-- Modal Delete start -->
-
+{{range $v := .Shops}}
+<div id="modal-delete-{{$v.Id}}" uk-modal>
+	<div class="uk-modal-dialog">
+		<button class="uk-modal-close-default" type="button" uk-close></button>
+		<form class="uk-form-stacked" action="/delete-shop" method="post">
+			<div class="uk-modal-header">
+				<h2 class="uk-modal-title">Delete {{$v.Name}}</h2>
+			</div>
+			<input class="uk-input" id="form-stacked-text-{{$v.Id}}" type="hidden" name="Id" value="{{$v.Id}}">
+			<div class="uk-modal-body" uk-overflow-auto>
+				<div class="uk-margin">
+					削除しますか？
+				</div>
+			<div class="uk-modal-footer uk-text-right">
+				<input class="uk-button uk-button-default uk-modal-close" type="button" value="Cancel">
+				<input class="uk-button uk-button-primary" type="submit" value="Delete">
+			</div>
+		</form>
+	</div>
+</div>
+{{end}}
 <!-- Modal Delete end -->
 {{end}}

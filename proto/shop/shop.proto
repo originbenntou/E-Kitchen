@@ -45,17 +45,17 @@ message UpdateShopResponse {
     bool success = 1;
 }
 
-//message DeleteShopRequest {
-//    uint64 id = 1;
-//}
-//
-//message DeleteShopResponse {
-//    bool success = 1;
-//}
+message DeleteShopRequest {
+    uint64 id = 1;
+}
+
+message DeleteShopResponse {
+    bool success = 1;
+}
 
 service ShopService {
     rpc FindShops (google.protobuf.Empty) returns (FindShopsResponse);
 //    rpc CreateShop (CreateShopRequest) returns (CreateShopResponse);
     rpc UpdateShop (UpdateShopRequest) returns (UpdateShopResponse);
-//    rpc DeleteShop (DeleteShopRequest) returns (DeleteShopResponse);
+    rpc DeleteShop (DeleteShopRequest) returns (DeleteShopResponse);
 }

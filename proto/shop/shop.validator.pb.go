@@ -52,3 +52,9 @@ func (this *UpdateShopRequest) Validate() error {
 func (this *UpdateShopResponse) Validate() error {
 	return nil
 }
+func (this *DeleteShopRequest) Validate() error {
+	return nil
+}
+func (this *DeleteShopResponse) Validate() error {
+	return nil
+}

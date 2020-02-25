@@ -9,8 +9,8 @@ import (
 )
 
 const (
-	sessionExpires      = 3 * time.Minute
-	clearInterval       = 10 * time.Minute
+	sessionExpires      = 10 * time.Minute
+	clearInterval       = 20 * time.Minute
 	cookieNameSessionID = "session-id"
 )
 
