@@ -97,3 +97,21 @@ func (s *ShopService) DeleteShop(ctx context.Context, req *pbShop.DeleteShopRequ
 
 	return &pbShop.DeleteShopResponse{Success: true}, nil
 }
+
+func (s *ShopService) CreateShop(ctx context.Context, req *pbShop.CreateShopRequest) (*pbShop.CreateShopResponse, error) {
+	if errList := s.db.Insert(&Shop{
+		Name:       req.Shop.Name,
+		Status:     uint64(pbShop.Status_value[req.Shop.Status.String()]),
+		CategoryId: req.Shop.CategoryId,
+		UserId:     req.Shop.UserId,
+		CreatedAt:  time.Now(),
+		UpdatedAt:  time.Now(),
+	}).GetErrors(); len(errList) > 0 {
+		for _, err := range errList {
+			log.Printf("delete shop failed: %s", err)
+		}
+		return &pbShop.CreateShopResponse{Success: false}, status.Error(codes.Internal, "Server Error")
+	}
+
+	return &pbShop.CreateShopResponse{Success: true}, nil
+}

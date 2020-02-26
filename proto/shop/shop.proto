@@ -29,13 +29,13 @@ message FindShopsResponse {
     repeated Shop shops = 1;
 }
 
-//message CreateShopRequest {
-//    Shop shop = 1;
-//}
-//
-//message CreateShopResponse {
-//    bool success = 1;
-//}
+message CreateShopRequest {
+    Shop shop = 1;
+}
+
+message CreateShopResponse {
+    bool success = 1;
+}
 
 message UpdateShopRequest {
     Shop shop = 1;
@@ -55,7 +55,7 @@ message DeleteShopResponse {
 
 service ShopService {
     rpc FindShops (google.protobuf.Empty) returns (FindShopsResponse);
-//    rpc CreateShop (CreateShopRequest) returns (CreateShopResponse);
+    rpc CreateShop (CreateShopRequest) returns (CreateShopResponse);
     rpc UpdateShop (UpdateShopRequest) returns (UpdateShopResponse);
     rpc DeleteShop (DeleteShopRequest) returns (DeleteShopResponse);
 }

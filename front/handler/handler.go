@@ -3,6 +3,7 @@ package handler
 import (
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/originbenntou/E-Kitchen/front/session"
+	"github.com/originbenntou/E-Kitchen/front/support"
 	"github.com/originbenntou/E-Kitchen/front/template"
 	pbShop "github.com/originbenntou/E-Kitchen/proto/shop"
 	pbUser "github.com/originbenntou/E-Kitchen/proto/user"
@@ -20,8 +21,11 @@ type FrontServer struct {
 
 type Content struct {
 	PageName string
+	User     string
 	Shops    []*pbShop.Shop
 }
+
+type contextKeyUser struct{}
 
 func (s *FrontServer) IndexHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
@@ -34,7 +38,31 @@ func (s *FrontServer) IndexHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	template.Render(w, "index", &Content{PageName: "INDEX", Shops: res.Shops})
+	template.Render(w, "index", &Content{PageName: "INDEX", User: support.GetUserFromContext(r.Context()), Shops: res.Shops})
+}
+
+func (s *FrontServer) CreateShopHandler(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+
+	id, _ := strconv.ParseUint(r.Form.Get("Id"), 10, 64)
+	status, _ := strconv.Atoi(r.Form.Get("Status"))
+
+	resp, err := s.ShopClient.CreateShop(r.Context(), &pbShop.CreateShopRequest{
+		Shop: &pbShop.Shop{
+			Id:         id,
+			Name:       r.Form.Get("Name"),
+			Status:     pbShop.Status(status),
+			CategoryId: 1,
+			UserId:     1,
+		},
+	})
+	if resp.Success == false || err != nil {
+		log.Println(err)
+		http.Redirect(w, r, "/error", http.StatusFound)
+		return
+	}
+
+	http.Redirect(w, r, "/", http.StatusFound)
 }
 
 func (s *FrontServer) EditShopHandler(w http.ResponseWriter, r *http.Request) {

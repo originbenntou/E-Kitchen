@@ -41,6 +41,17 @@ func (this *FindShopsResponse) Validate() error {
 	}
 	return nil
 }
+func (this *CreateShopRequest) Validate() error {
+	if this.Shop != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Shop); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Shop", err)
+		}
+	}
+	return nil
+}
+func (this *CreateShopResponse) Validate() error {
+	return nil
+}
 func (this *UpdateShopRequest) Validate() error {
 	if this.Shop != nil {
 		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Shop); err != nil {

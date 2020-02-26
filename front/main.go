@@ -34,6 +34,7 @@ func main() {
 	auth := middleware.NewAuthentication(userClient, sessionStore)
 
 	r.Path("/").Methods(http.MethodGet).HandlerFunc(auth(fs.IndexHandler))
+	r.Path("/create-shop").Methods(http.MethodPost).HandlerFunc(auth(fs.CreateShopHandler))
 	r.Path("/edit-shop").Methods(http.MethodPost).HandlerFunc(auth(fs.EditShopHandler))
 	r.Path("/delete-shop").Methods(http.MethodPost).HandlerFunc(auth(fs.DeleteShopHandler))
 	r.Path("/signin").Methods(http.MethodGet).HandlerFunc(fs.SigninHandler)
