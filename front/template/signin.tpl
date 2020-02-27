@@ -1,13 +1,5 @@
 {{define "content"}}
-
-<!-- Vue-cdn -->
-<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
-
-<!-- VeeValidate-cdn -->
-<script src="https://cdn.jsdelivr.net/npm/vee-validate@3.2.3/dist/vee-validate.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vee-validate@3.2.3/dist/rules.umd.min.js"></script>
-
-<div id="app">
+<div id="sign">
 	<section class="uk-margin-large-top uk-width-2-5@l uk-width-4-5 uk-margin-auto uk-margin uk-card uk-card-default uk-card-body uk-text-center">
 		<form action="/user-verify" method="post">
 			<fieldset class="uk-fieldset">
@@ -51,6 +43,6 @@
 	</section>
 </div>
 
-<script src="./static/index.js" type="text/javascript"></script>
+<script src="./static/sign.js" type="text/javascript"></script>
 {{end}}
 

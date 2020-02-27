@@ -25,8 +25,6 @@ type Content struct {
 	Shops    []*pbShop.Shop
 }
 
-type contextKeyUser struct{}
-
 func (s *FrontServer) IndexHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	var in empty.Empty

@@ -26,7 +26,7 @@ Vue.component('ValidationObserver', ValidationObserver)
 
 new Vue({
     delimiters: ['${', '}'],
-    el: '#index',
+    el: '#sign',
     data: {
         email: '',
         password: '',

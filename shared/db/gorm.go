@@ -54,7 +54,7 @@ func (g *GormMutex) Select(model interface{}, column string, value string) *gorm
 	log.Printf("MySQL Connect Success: %s", runtime.FuncForPC(pt).Name())
 	defer db.Close()
 
-	return db.Find(model).Where(column+"=?", value)
+	return db.Where(column+"=?", value).First(model)
 }
 
 func (g *GormMutex) Count(model interface{}, column string, value string) (*gorm.DB, int) {
@@ -95,22 +95,8 @@ func (g *GormMutex) Update(model interface{}) *gorm.DB {
 	defer db.Close()
 
 	db.Model(model).Updates(model)
-	db.Save(model)
 
 	return db.Save(model)
-}
-
-func (g *GormMutex) LogicalDelete(model interface{}, status uint64) *gorm.DB {
-	pt, _, _, ok := runtime.Caller(0)
-	if !ok {
-		log.Println("trace failed")
-	}
-
-	db := g.connect()
-	log.Printf("MySQL Connect Success: %s", runtime.FuncForPC(pt).Name())
-	defer db.Close()
-
-	return db.Model(model).Update("status", status)
 }
 
 func (g *GormMutex) Delete(model interface{}) *gorm.DB {

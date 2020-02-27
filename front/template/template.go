@@ -1,8 +1,11 @@
 package template
 
 import (
+	"github.com/golang/protobuf/ptypes"
+	"github.com/golang/protobuf/ptypes/timestamp"
 	"html/template"
 	"net/http"
+	"time"
 
 	pbShop "github.com/originbenntou/E-Kitchen/proto/shop"
 )
@@ -15,6 +18,20 @@ func Render(w http.ResponseWriter, name string, content interface{}) {
 				return "checked"
 			}
 			return ""
+		},
+		"trClass": func(a pbShop.Status) string {
+			if a == pbShop.Status_PRIVATE {
+				return "uk-tile-muted"
+			}
+			if a == pbShop.Status_DELETED {
+				return "uk-hidden"
+			}
+			return ""
+		},
+		"convertTime": func(a *timestamp.Timestamp) string {
+			t, _ := ptypes.Timestamp(a)
+			jst := time.FixedZone("Asia/Tokyo", 9*60*60)
+			return t.In(jst).Format("2006/01/02 15:04")
 		},
 	}
 

@@ -43,11 +43,13 @@ func NewAuthentication(
 			// セッション有効ならユーザーID取得
 			v, ok := sessionStore.Get(sessionID)
 			if !ok {
+				log.Println("session get failed")
 				http.Redirect(w, r, "/signin", http.StatusFound)
 				return
 			}
 			userID, ok := v.(uint64)
 			if !ok {
+				log.Println("sessionId convert into userId failed")
 				http.Redirect(w, r, "/signin", http.StatusFound)
 				return
 			}
@@ -57,7 +59,8 @@ func NewAuthentication(
 				UserId: userID,
 			})
 			if err != nil {
-				http.Redirect(w, r, "/login", http.StatusFound)
+				log.Println(err)
+				http.Redirect(w, r, "/signin", http.StatusFound)
 				return
 			}
 			// contextを介して他機能にユーザー情報を共有

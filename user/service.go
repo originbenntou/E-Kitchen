@@ -9,6 +9,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"log"
+	"strconv"
 	"time"
 )
 
@@ -38,6 +39,7 @@ func newUserGormMutex() *db.GormMutex {
 
 func (s *UserService) VerifyUser(ctx context.Context, req *pbUser.VerifyUserRequest) (*pbUser.VerifyUserResponse, error) {
 	user, errList := s.getUser(req.Email)
+
 	if len(errList) > 0 {
 		for _, err := range errList {
 			log.Printf("verify user failed: %s", err)
@@ -156,7 +158,7 @@ func (s *UserService) getUser(email string) (User, []error) {
 
 func (s *UserService) findUser(id uint64) (string, []error) {
 	var m User
-	if err := s.db.Select(&m, "id", string(id)).GetErrors(); len(err) > 0 {
+	if err := s.db.Select(&m, "id", strconv.FormatUint(id, 10)).GetErrors(); len(err) > 0 {
 		return "", err
 	}
 

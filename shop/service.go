@@ -86,9 +86,10 @@ func (s *ShopService) UpdateShop(ctx context.Context, req *pbShop.UpdateShopRequ
 
 func (s *ShopService) DeleteShop(ctx context.Context, req *pbShop.DeleteShopRequest) (*pbShop.DeleteShopResponse, error) {
 	// 論理削除
-	if errList := s.db.LogicalDelete(&Shop{
-		Id: req.Id,
-	}, uint64(pbShop.Status_value["DELETED"])).GetErrors(); len(errList) > 0 {
+	if errList := s.db.Update(&Shop{
+		Id:     req.Id,
+		Status: uint64(pbShop.Status_value["DELETED"]),
+	}).GetErrors(); len(errList) > 0 {
 		for _, err := range errList {
 			log.Printf("delete shop failed: %s", err)
 		}
