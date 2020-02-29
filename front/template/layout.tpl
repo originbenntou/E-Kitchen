@@ -17,6 +17,9 @@
 	<!-- Vue-cdn -->
 	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
 
+	<!-- axios-cdn -->
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
 	<!-- VeeValidate-cdn -->
 	<script src="https://cdn.jsdelivr.net/npm/vee-validate@3.2.3/dist/vee-validate.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/vee-validate@3.2.3/dist/rules.umd.min.js"></script>

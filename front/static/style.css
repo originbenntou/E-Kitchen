@@ -1,35 +1,78 @@
-.tooltip2{
+.tag-container {
+    padding: 5px 5px 0 5px;
+    border: 1px solid #e5e5e5;
+    margin: 0px;
+    margin-bottom: 5px;
+    font-size: 15px;
+}
+.tag-container .tag-label,
+.tag-container .editor {
+    float: left;
+}
+.tag-container .tag-label {
+    background: #EBF4FB;
+    padding: 0 2.1em 0 12px;
+    margin: 0 5px 5px 0;
+    height: 2em;
+    border-radius: 1em;
+    box-sizing: border-box;
     position: relative;
-    cursor: pointer;
+}
+.tag-label-text {
     display: inline-block;
+    height: 100%;
+    margin: 0;
+    padding: .5em 0 0 0;
+    line-height: 1;
 }
-.tooltip2 p{
-    margin:0;
-    padding:0;
-}
-.description2 {
-    display: none;
+.tag-container a.tag-remove {
+    height: 100%;
+    width: 2em;
+    display: block;
     position: absolute;
-    padding: 10px;
-    font-size: 12px;
-    line-height: 1.6em;
-    color: #fff;
-    border-radius: 5px;
-    background: #000;
-    width: 100px;
+    border-radius: 2em;
+    right: 0;
+    top: 0;
+    margin: 0;
+    padding: 0;
 }
-.description2:before {
+.tag-container a.tag-remove:hover {
+    background: #bbd8f1;
+}
+.tag-container .tag-label svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+}
+.tag-container .editor .input {
+    border: 0px;
+    outline: 0;
+    background: transparent;
+    padding: 3px 4px;
+    min-width: 5em;
+    width: auto;
+}
+.cf::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.tag-container .tag-label.dragover {
+    margin-left: 10px;
+}
+.tag-container .tag-label.dragover::before {
+    width: 4px;
+    height: 1.6em;
+    background: #333;
+    display: block;
     content: "";
     position: absolute;
-    top: 0%;
-    right: 95%;
-    border: 15px solid transparent;
-    border-top: 15px solid #000;
-    margin-left: -15px;
-    transform: rotateZ(90deg);
-}
-.tooltip2:hover .description2{
-    display: inline-block;
-    top: 0px;
-    left: 80px;
+    left:-10px;
+    top: 0.2em;
+    background: rgb(109, 109, 112);
+    border-radius: 1em;
 }

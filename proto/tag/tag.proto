@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package tag;
+
+option go_package = "github.com/originbenntou/E-Kitchen/proto/tag";
+
+import "google/protobuf/empty.proto";
+
+import "github.com/mwitkow/go-proto-validators/validator.proto";
+
+message FindTagsResponse {
+    repeated string name = 1;
+}
+
+service TagService {
+    rpc FindTags (google.protobuf.Empty) returns (FindTagsResponse);
+}
