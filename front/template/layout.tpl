@@ -5,6 +5,8 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="x-ua-compatible" content="ie=edge">
 	<title>{{.PageName}} | E-KITCHEN </title>
+	<link rel="stylesheet" type="text/css" href="./static/style.css">
+
 	<!-- UIkit CSS -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.2.0/css/uikit.min.css" />
 

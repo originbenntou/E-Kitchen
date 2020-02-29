@@ -1,0 +1,14 @@
+DROP DATABASE IF EXISTS user;
+CREATE DATABASE user;
+
+use user
+
+DROP TABLE IF EXISTS users;
+CREATE TABLE users (
+  id INT unsigned NOT NULL auto_increment,
+  email VARCHAR(255) NOT NULL,
+  password VARCHAR(1023) NOT NULL,
+  created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+);

@@ -32,7 +32,7 @@ func newUserGormMutex() *db.GormMutex {
 		USER:   "root",
 		PASS:   "password",
 		DBHOST: "e-kitchen-mysql:3306",
-		DBNAME: "e_kitchen",
+		DBNAME: "user",
 		OPTION: "charset=utf8&parseTime=True",
 	}
 }

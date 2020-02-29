@@ -47,11 +47,11 @@ func (s *FrontServer) CreateShopHandler(w http.ResponseWriter, r *http.Request) 
 
 	resp, err := s.ShopClient.CreateShop(r.Context(), &pbShop.CreateShopRequest{
 		Shop: &pbShop.Shop{
-			Id:         id,
-			Name:       r.Form.Get("Name"),
-			Status:     pbShop.Status(status),
-			CategoryId: 1,
-			UserId:     1,
+			Id:     id,
+			Name:   r.Form.Get("Name"),
+			Status: pbShop.Status(status),
+			Url:    r.Form.Get("Url"),
+			UserId: 1,
 		},
 	})
 	if resp.Success == false || err != nil {
@@ -71,11 +71,11 @@ func (s *FrontServer) EditShopHandler(w http.ResponseWriter, r *http.Request) {
 
 	resp, err := s.ShopClient.UpdateShop(r.Context(), &pbShop.UpdateShopRequest{
 		Shop: &pbShop.Shop{
-			Id:         id,
-			Name:       r.Form.Get("Name"),
-			Status:     pbShop.Status(status),
-			CategoryId: 1,
-			UserId:     1,
+			Id:     id,
+			Name:   r.Form.Get("Name"),
+			Status: pbShop.Status(status),
+			Url:    r.Form.Get("Url"),
+			UserId: 1,
 		},
 	})
 	if resp.Success == false || err != nil {
@@ -93,7 +93,10 @@ func (s *FrontServer) DeleteShopHandler(w http.ResponseWriter, r *http.Request) 
 	id, _ := strconv.ParseUint(r.Form.Get("Id"), 10, 64)
 
 	resp, err := s.ShopClient.DeleteShop(r.Context(), &pbShop.DeleteShopRequest{
-		Id: id,
+		Shop: &pbShop.Shop{
+			Id:     id,
+			UserId: 1,
+		},
 	})
 	if resp.Success == false || err != nil {
 		log.Println(err)

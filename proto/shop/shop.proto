@@ -19,7 +19,7 @@ message Shop {
     uint64 id = 1;
     string name = 2;
     Status status = 3;
-    uint64 category_id = 4;
+    string url = 4;
     uint64 user_id = 5;
     google.protobuf.Timestamp created_at = 6;
     google.protobuf.Timestamp updated_at = 7;
@@ -46,7 +46,7 @@ message UpdateShopResponse {
 }
 
 message DeleteShopRequest {
-    uint64 id = 1;
+    Shop shop = 1;
 }
 
 message DeleteShopResponse {

@@ -6,8 +6,9 @@
 		<tr>
 			<th>Id</th>
 			<th>Name</th>
+			<th>Star</th>
+			<th>Tag</th>
 			<th>Status</th>
-			<th>CategoryId</th>
 			<th>UserId</th>
 			<th>Created_At</th>
 			<th>Updated_At</th>
@@ -23,9 +24,10 @@
 		{{range $v := .Shops}}
 		<tr class="{{trClass $v.Status}}">
 			<td>{{$v.Id}}</td>
-			<td>{{$v.Name}}</td>
+			<td><a href="{{$v.Url}}">{{$v.Name}}</a></td>
+			<td>★★★★☆</td>
+			<td>#近場 #破滅</td>
 			<td>{{$v.Status}}</td>
-			<td>{{$v.CategoryId}}</td>
 			<td>{{$v.UserId}}</td>
 			<td>{{convertTime $v.CreatedAt}}</td>
 			<td>{{convertTime $v.UpdatedAt}}</td>
@@ -55,23 +57,17 @@
 						</div>
 					</div>
 					<div class="uk-margin">
+						<label class="uk-form-label" for="form-stacked-text">Url</label>
+						<div class="uk-form-controls">
+							<input class="uk-input" id="form-stacked-text" type="text" name="Url" value="">
+						</div>
+					</div>
+					<div class="uk-margin">
 						<div class="uk-form-label">Status</div>
 						<div class="uk-form-controls">
 							<label><input class="uk-radio-0" type="radio" name="Status" value="0">公開</label>
 							<br>
 							<label><input class="uk-radio-1" type="radio" name="Status" value="1">非公開</label>
-						</div>
-					</div>
-					<div class="uk-margin">
-						<label class="uk-form-label" for="form-stacked-select">CategoryId</label>
-						<div class="uk-form-controls">
-							<select class="uk-select" id="form-stacked-select">
-								<option>1</option>
-								<option>2</option>
-								<option>3</option>
-								<option>4</option>
-								<option>5</option>
-							</select>
 						</div>
 					</div>
 				</div>
@@ -102,23 +98,17 @@
 						</div>
 					</div>
 					<div class="uk-margin">
+						<label class="uk-form-label" for="form-stacked-text-{{$v.Id}}">Url</label>
+						<div class="uk-form-controls">
+							<input class="uk-input" id="form-stacked-text-{{$v.Id}}" type="text" name="Url" value="{{$v.Url}}">
+						</div>
+					</div>
+					<div class="uk-margin">
 						<div class="uk-form-label">Status</div>
 						<div class="uk-form-controls">
 							<label><input class="uk-radio-0" type="radio" name="Status" value="0" {{checked $v.Status "PUBLIC"}}>公開</label>
 							<br>
 							<label><input class="uk-radio-1" type="radio" name="Status" value="1" {{checked $v.Status "PRIVATE"}}>非公開</label>
-						</div>
-					</div>
-					<div class="uk-margin">
-						<label class="uk-form-label" for="form-stacked-select-{{$v.Id}}">CategoryId</label>
-						<div class="uk-form-controls">
-							<select class="uk-select" id="form-stacked-select-{{$v.Id}}">
-								<option>1</option>
-								<option>2</option>
-								<option>3</option>
-								<option>4</option>
-								<option>5</option>
-							</select>
 						</div>
 					</div>
 				</div>
@@ -147,6 +137,12 @@
 						<label class="uk-form-label" for="form-stacked-text-{{$v.Id}}">Name</label>
 						<div class="uk-form-controls">
 							<p>{{$v.Name}}</p>
+						</div>
+					</div>
+					<div class="uk-margin">
+						<label class="uk-form-label" for="form-stacked-text-{{$v.Id}}">Url</label>
+						<div class="uk-form-controls">
+							<p>{{$v.Url}}</p>
 						</div>
 					</div>
 					<div class="uk-margin">
