@@ -6,7 +6,6 @@ package tag
 import (
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
-	_ "github.com/golang/protobuf/ptypes/empty"
 	_ "github.com/mwitkow/go-proto-validators"
 	math "math"
 )
@@ -16,6 +15,9 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
+func (this *FindTagsRequest) Validate() error {
+	return nil
+}
 func (this *FindTagsResponse) Validate() error {
 	return nil
 }

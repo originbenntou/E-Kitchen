@@ -6,6 +6,7 @@ import (
 	"github.com/originbenntou/E-Kitchen/front/middleware"
 	"github.com/originbenntou/E-Kitchen/front/session"
 	pbShop "github.com/originbenntou/E-Kitchen/proto/shop"
+	pbTag "github.com/originbenntou/E-Kitchen/proto/tag"
 	pbUser "github.com/originbenntou/E-Kitchen/proto/user"
 	"google.golang.org/grpc"
 	"log"
@@ -20,12 +21,14 @@ func main() {
 	// FIXME: ConfigMap
 	userClient := pbUser.NewUserServiceClient(grpcConnect("e-kitchen-user:50051"))
 	shopClient := pbShop.NewShopServiceClient(grpcConnect("e-kitchen-shop:50051"))
+	tagClient := pbTag.NewTagServiceClient(grpcConnect("e-kitchen-tag:50051"))
 	sessionStore := session.NewStoreOnMemory()
 
 	// FrontServerが各マイクロサービスにDial
 	fs := &handler.FrontServer{
 		UserClient:   userClient,
 		ShopClient:   shopClient,
+		TagClient:    tagClient,
 		SessionStore: sessionStore,
 	}
 

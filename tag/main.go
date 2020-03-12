@@ -20,7 +20,7 @@ func main() {
 			grpc_validator.UnaryServerInterceptor(),
 		)),
 	)
-	pbTag.RegisterUserServiceServer(server, &TagService{
+	pbTag.RegisterTagServiceServer(server, &TagService{
 		db: newTagGormMutex(),
 	})
 

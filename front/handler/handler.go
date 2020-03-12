@@ -1,11 +1,13 @@
 package handler
 
 import (
+	"fmt"
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/originbenntou/E-Kitchen/front/session"
 	"github.com/originbenntou/E-Kitchen/front/support"
 	"github.com/originbenntou/E-Kitchen/front/template"
 	pbShop "github.com/originbenntou/E-Kitchen/proto/shop"
+	pbTag "github.com/originbenntou/E-Kitchen/proto/tag"
 	pbUser "github.com/originbenntou/E-Kitchen/proto/user"
 	"io"
 	"log"
@@ -16,6 +18,7 @@ import (
 type FrontServer struct {
 	UserClient   pbUser.UserServiceClient
 	ShopClient   pbShop.ShopServiceClient
+	TagClient    pbTag.TagServiceClient
 	SessionStore session.Store
 }
 
@@ -35,6 +38,18 @@ func (s *FrontServer) IndexHandler(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/error", http.StatusFound)
 		return
 	}
+
+	var tagNames [][]string
+	for _, shop := range res.Shops {
+		_, err := s.TagClient.FindTags(r.Context(), &pbTag.FindTagsRequest{Id: shop.Id})
+		if err != nil {
+			log.Println(err)
+			http.Redirect(w, r, "/error", http.StatusFound)
+			return
+		}
+	}
+
+	fmt.Println(tagNames)
 
 	template.Render(w, "index", &Content{PageName: "INDEX", User: support.GetUserFromContext(r.Context()), Shops: res.Shops})
 }

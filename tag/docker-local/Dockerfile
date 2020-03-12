@@ -14,4 +14,4 @@ COPY . $WORK_DIR
 
 RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go install $MAIN_PATH
 
-ENTRYPOINT ["/go/bin/user"]
+ENTRYPOINT ["/go/bin/tag"]

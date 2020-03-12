@@ -21,12 +21,12 @@ type GormMutex struct {
 }
 
 func (g *GormMutex) connect() *gorm.DB {
-	CONNECT := g.USER + ":" + g.PASS + "@tcp(" + g.DBHOST + ")/" + g.DBNAME + "?" + g.OPTION
-
-	db, err := gorm.Open(g.DBMS, CONNECT)
+	db, err := gorm.Open(g.DBMS, g.USER+":"+g.PASS+"@tcp("+g.DBHOST+")/"+g.DBNAME+"?"+g.OPTION)
 	if err != nil {
 		log.Fatalln(err.Error())
 	}
+
+	db.SingularTable(true)
 
 	return db
 }
@@ -44,7 +44,7 @@ func (g *GormMutex) Insert(model interface{}) *gorm.DB {
 	return db.Create(model)
 }
 
-func (g *GormMutex) Select(model interface{}, column string, value string) *gorm.DB {
+func (g *GormMutex) SelectByWhereOneColumn(model interface{}, column string, value string) *gorm.DB {
 	pt, _, _, ok := runtime.Caller(0)
 	if !ok {
 		log.Println("trace failed")
@@ -110,4 +110,17 @@ func (g *GormMutex) Delete(model interface{}) *gorm.DB {
 	defer db.Close()
 
 	return db.Delete(model)
+}
+
+func (g *GormMutex) SelectByWhereIn(model interface{}, column string, list []string) *gorm.DB {
+	pt, _, _, ok := runtime.Caller(0)
+	if !ok {
+		log.Println("trace failed")
+	}
+
+	db := g.connect()
+	log.Printf("MySQL Connect Success: %s", runtime.FuncForPC(pt).Name())
+	defer db.Close()
+
+	return db.Where(column+" IN (?)", list).Find(model)
 }

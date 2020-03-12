@@ -3,8 +3,8 @@ CREATE DATABASE resource;
 
 use resource
 
-DROP TABLE IF EXISTS shops;
-CREATE TABLE shops (
+DROP TABLE IF EXISTS shop;
+CREATE TABLE shop (
   id INT unsigned NOT NULL auto_increment,
   name VARCHAR(255) NOT NULL DEFAULT "unknown",
   status INT unsigned NOT NULL DEFAULT 0,
@@ -33,6 +33,6 @@ CREATE TABLE tag_map (
   created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
-  FOREIGN KEY (shop_id) REFERENCES shops(id) ON DELETE CASCADE,
+  FOREIGN KEY (shop_id) REFERENCES shop(id) ON DELETE CASCADE,
   FOREIGN KEY (tag_id) REFERENCES tag(id) ON DELETE CASCADE
 );

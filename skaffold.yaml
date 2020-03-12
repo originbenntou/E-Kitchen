@@ -26,6 +26,14 @@ build:
         manual:
           - src: "shop/*"
             dest: "shop"
+    - image: originbenntou/e-kitchen-tag
+      context: .
+      docker:
+        dockerfile: ./tag/docker-local/Dockerfile
+      sync:
+        manual:
+          - src: "tag/*"
+            dest: "tag"
     - image: originbenntou/e-kitchen-mysql
       context: .
       docker:

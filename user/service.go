@@ -32,7 +32,7 @@ func newUserGormMutex() *db.GormMutex {
 		USER:   "root",
 		PASS:   "password",
 		DBHOST: "e-kitchen-mysql:3306",
-		DBNAME: "user",
+		DBNAME: "account",
 		OPTION: "charset=utf8&parseTime=True",
 	}
 }
@@ -140,7 +140,7 @@ func (s *UserService) existUser(email string) (bool, []error) {
 
 func (s *UserService) getId(email string) uint64 {
 	var m User
-	if err := s.db.Select(&m, "email", email).GetErrors(); len(err) > 0 {
+	if err := s.db.SelectByWhereOneColumn(&m, "email", email).GetErrors(); len(err) > 0 {
 		return 0
 	}
 
@@ -149,7 +149,7 @@ func (s *UserService) getId(email string) uint64 {
 
 func (s *UserService) getUser(email string) (User, []error) {
 	var m User
-	if err := s.db.Select(&m, "email", email).GetErrors(); len(err) > 0 {
+	if err := s.db.SelectByWhereOneColumn(&m, "email", email).GetErrors(); len(err) > 0 {
 		return User{}, err
 	}
 
@@ -158,7 +158,7 @@ func (s *UserService) getUser(email string) (User, []error) {
 
 func (s *UserService) findUser(id uint64) (string, []error) {
 	var m User
-	if err := s.db.Select(&m, "id", strconv.FormatUint(id, 10)).GetErrors(); len(err) > 0 {
+	if err := s.db.SelectByWhereOneColumn(&m, "id", strconv.FormatUint(id, 10)).GetErrors(); len(err) > 0 {
 		return "", err
 	}
 

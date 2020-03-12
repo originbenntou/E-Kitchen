@@ -1,10 +1,10 @@
-DROP DATABASE IF EXISTS user;
-CREATE DATABASE user;
+DROP DATABASE IF EXISTS account;
+CREATE DATABASE account;
 
-use user
+use account
 
-DROP TABLE IF EXISTS users;
-CREATE TABLE users (
+DROP TABLE IF EXISTS user;
+CREATE TABLE user (
   id INT unsigned NOT NULL auto_increment,
   email VARCHAR(255) NOT NULL,
   password VARCHAR(1023) NOT NULL,

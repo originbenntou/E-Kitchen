@@ -26,7 +26,7 @@
 			<td>{{$v.Id}}</td>
 			<td><a href="{{$v.Url}}">{{$v.Name}}</a></td>
 			<td>★★★★☆</td>
-			<td>#近場 #破滅</td>
+			<td></td>
 			<td>{{$v.Status}}</td>
 			<td>{{$v.UserId}}</td>
 			<td>{{convertTime $v.CreatedAt}}</td>

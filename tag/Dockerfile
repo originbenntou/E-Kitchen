@@ -18,4 +18,4 @@ FROM alpine:latest
 ENV TZ Asia/Tokyo
 COPY --from=builder /go/bin/tag /go/bin/tag
 
-ENTRYPOINT ["/go/bin/user"]
+ENTRYPOINT ["/go/bin/tag"]
