@@ -26,7 +26,9 @@
 			<td>{{$v.Id}}</td>
 			<td><a href="{{$v.Url}}">{{$v.Name}}</a></td>
 			<td>★★★★☆</td>
-			<td></td>
+			<td>
+				{{(index $.Tags $v.Id)}}
+			</td>
 			<td>{{$v.Status}}</td>
 			<td>{{$v.UserId}}</td>
 			<td>{{convertTime $v.CreatedAt}}</td>

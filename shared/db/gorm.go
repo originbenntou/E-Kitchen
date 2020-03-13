@@ -54,7 +54,7 @@ func (g *GormMutex) SelectByWhereOneColumn(model interface{}, column string, val
 	log.Printf("MySQL Connect Success: %s", runtime.FuncForPC(pt).Name())
 	defer db.Close()
 
-	return db.Where(column+"=?", value).First(model)
+	return db.Where(column+"=?", value).Find(model)
 }
 
 func (g *GormMutex) Count(model interface{}, column string, value string) (*gorm.DB, int) {

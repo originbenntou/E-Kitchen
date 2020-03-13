@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/originbenntou/E-Kitchen/front/session"
 	"github.com/originbenntou/E-Kitchen/front/support"
@@ -13,6 +12,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 )
 
 type FrontServer struct {
@@ -26,32 +26,38 @@ type Content struct {
 	PageName string
 	User     string
 	Shops    []*pbShop.Shop
+	Tags     map[uint64]string
 }
 
 func (s *FrontServer) IndexHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	var in empty.Empty
 
-	res, err := s.ShopClient.FindShops(r.Context(), &in)
+	resShop, err := s.ShopClient.FindShops(r.Context(), &in)
 	if err != nil {
 		log.Println(err)
 		http.Redirect(w, r, "/error", http.StatusFound)
 		return
 	}
 
-	var tagNames [][]string
-	for _, shop := range res.Shops {
-		_, err := s.TagClient.FindTags(r.Context(), &pbTag.FindTagsRequest{Id: shop.Id})
+	tagNames := make(map[uint64]string)
+	for _, shop := range resShop.Shops {
+		resTag, err := s.TagClient.FindTags(r.Context(), &pbTag.FindTagsRequest{Id: shop.Id})
 		if err != nil {
 			log.Println(err)
 			http.Redirect(w, r, "/error", http.StatusFound)
 			return
 		}
+
+		tagNames[shop.Id] = strings.Join(resTag.Name, " ")
 	}
 
-	fmt.Println(tagNames)
-
-	template.Render(w, "index", &Content{PageName: "INDEX", User: support.GetUserFromContext(r.Context()), Shops: res.Shops})
+	template.Render(w, "index", &Content{
+		PageName: "INDEX",
+		User:     support.GetUserFromContext(r.Context()),
+		Shops:    resShop.Shops,
+		Tags:     tagNames,
+	})
 }
 
 func (s *FrontServer) CreateShopHandler(w http.ResponseWriter, r *http.Request) {

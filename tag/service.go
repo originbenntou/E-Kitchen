@@ -70,5 +70,5 @@ func (s *TagService) FindTags(ctx context.Context, req *pbTag.FindTagsRequest) (
 		tagNames = append(tagNames, tag.Name)
 	}
 
-	return &pbTag.FindTagsResponse{Name: []string{"hoge"}}, nil
+	return &pbTag.FindTagsResponse{Name: tagNames}, nil
 }
