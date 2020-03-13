@@ -55,6 +55,11 @@
     min-width: 5em;
     width: auto;
 }
+
+.cf {
+    height: 7em;
+}
+
 .cf::after {
     content: "";
     clear: both;

@@ -1,11 +1,9 @@
 new Vue({
     delimiters: ['${', '}'],
     el: '#tag-create',
-    data() {
-        return {
-            tags: ["hoge", "piyo", "fuga"],
-            canEnter: false,
-        }
+    data: {
+        tags: ["hogehogheo", "piyoyoayoayfoa"],
+        canEnter: false,
     },
     methods: {
         enter(target) {
@@ -20,12 +18,12 @@ new Vue({
         remove(index) {
             this.tags.splice(index, 1);
         },
-        submitTag: async () => {
+        submitTag: async function() {
             try {
-                const result = await axios.post('/post-tag', this.tags)
-                window.alert(result)
+                const result = await axios.post('/tag-regist', this.tags)
+                window.alert("success:" + result)
             } catch (error) {
-                window.alert(error)
+                window.alert("error:" + error)
             }
         }
     },

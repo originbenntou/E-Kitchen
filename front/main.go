@@ -37,14 +37,15 @@ func main() {
 	auth := middleware.NewAuthentication(userClient, sessionStore)
 
 	r.Path("/").Methods(http.MethodGet).HandlerFunc(auth(fs.IndexHandler))
-	r.Path("/create-shop").Methods(http.MethodPost).HandlerFunc(auth(fs.CreateShopHandler))
-	r.Path("/edit-shop").Methods(http.MethodPost).HandlerFunc(auth(fs.EditShopHandler))
-	r.Path("/delete-shop").Methods(http.MethodPost).HandlerFunc(auth(fs.DeleteShopHandler))
 	r.Path("/signin").Methods(http.MethodGet).HandlerFunc(fs.SigninHandler)
 	r.Path("/user-verify").Methods(http.MethodPost).HandlerFunc(fs.UserVerifyHandler)
 	r.Path("/signup").Methods(http.MethodGet).HandlerFunc(fs.SignupHandler)
 	r.Path("/user-regist").Methods(http.MethodPost).HandlerFunc(fs.UserRegistHandler)
 	r.Path("/signout").Methods(http.MethodGet).HandlerFunc(auth(fs.SignoutHandler))
+	r.Path("/create-shop").Methods(http.MethodPost).HandlerFunc(auth(fs.CreateShopHandler))
+	r.Path("/edit-shop").Methods(http.MethodPost).HandlerFunc(auth(fs.EditShopHandler))
+	r.Path("/delete-shop").Methods(http.MethodPost).HandlerFunc(auth(fs.DeleteShopHandler))
+	r.Path("/tag-regist").Methods(http.MethodPost).HandlerFunc(auth(fs.TagRegistHandler))
 	r.Path("/health-check").Methods(http.MethodGet).HandlerFunc(fs.HealthCheckHandler)
 	r.Path("/error").Methods(http.MethodGet).HandlerFunc(fs.ErrorHandler)
 

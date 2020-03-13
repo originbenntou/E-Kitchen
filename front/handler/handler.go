@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/originbenntou/E-Kitchen/front/session"
 	"github.com/originbenntou/E-Kitchen/front/support"
@@ -127,6 +128,12 @@ func (s *FrontServer) DeleteShopHandler(w http.ResponseWriter, r *http.Request) 
 
 	http.Redirect(w, r, "/", http.StatusFound)
 
+}
+
+func (s *FrontServer) TagRegistHandler(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+	fmt.Println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", r)
+	http.Redirect(w, r, "/", http.StatusFound)
 }
 
 func (s *FrontServer) SigninHandler(w http.ResponseWriter, r *http.Request) {
