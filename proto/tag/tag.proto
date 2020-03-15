@@ -14,6 +14,16 @@ message FindTagsResponse {
     repeated string name = 1;
 }
 
+message RegisterTagRequest {
+    uint64 id = 1;
+    repeated string name = 2;
+}
+
+message RegisterTagResponse {
+    bool result = 1;
+}
+
 service TagService {
     rpc FindTags (FindTagsRequest) returns (FindTagsResponse);
+    rpc RegisterTag (RegisterTagRequest) returns (RegisterTagResponse);
 }

@@ -2,7 +2,7 @@ new Vue({
     delimiters: ['${', '}'],
     el: '#tag-create',
     data: {
-        tags: ["hogehogheo", "piyoyoayoayfoa"],
+        tags: [],
         canEnter: false,
     },
     methods: {
@@ -19,9 +19,12 @@ new Vue({
             this.tags.splice(index, 1);
         },
         submitTag: async function() {
+            let params = new URLSearchParams();
+            params.append('data', JSON.stringify(this.tags))
             try {
-                const result = await axios.post('/tag-regist', this.tags)
-                window.alert("success:" + result)
+                const result = await axios.post('/tag-register', params, {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                })
             } catch (error) {
                 window.alert("error:" + error)
             }

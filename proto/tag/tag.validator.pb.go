@@ -21,3 +21,9 @@ func (this *FindTagsRequest) Validate() error {
 func (this *FindTagsResponse) Validate() error {
 	return nil
 }
+func (this *RegisterTagRequest) Validate() error {
+	return nil
+}
+func (this *RegisterTagResponse) Validate() error {
+	return nil
+}

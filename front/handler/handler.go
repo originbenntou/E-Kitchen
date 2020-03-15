@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"fmt"
+	"encoding/json"
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/originbenntou/E-Kitchen/front/session"
 	"github.com/originbenntou/E-Kitchen/front/support"
@@ -67,6 +67,7 @@ func (s *FrontServer) CreateShopHandler(w http.ResponseWriter, r *http.Request) 
 	id, _ := strconv.ParseUint(r.Form.Get("Id"), 10, 64)
 	status, _ := strconv.Atoi(r.Form.Get("Status"))
 
+	// shop登録
 	resp, err := s.ShopClient.CreateShop(r.Context(), &pbShop.CreateShopRequest{
 		Shop: &pbShop.Shop{
 			Id:     id,
@@ -81,6 +82,15 @@ func (s *FrontServer) CreateShopHandler(w http.ResponseWriter, r *http.Request) 
 		http.Redirect(w, r, "/error", http.StatusFound)
 		return
 	}
+
+	// tag登録
+	tagNames := strings.Split(r.Form.Get("tag"), ",")
+	// エスケープ処理
+
+	s.TagClient.RegisterTag(r.Context(), &pbTag.RegisterTagRequest{
+		Id:   id,
+		Name: tagNames,
+	})
 
 	http.Redirect(w, r, "/", http.StatusFound)
 }
@@ -130,9 +140,12 @@ func (s *FrontServer) DeleteShopHandler(w http.ResponseWriter, r *http.Request) 
 
 }
 
-func (s *FrontServer) TagRegistHandler(w http.ResponseWriter, r *http.Request) {
+func (s *FrontServer) TagRegisterHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
-	fmt.Println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", r)
+
+	var tagNames []string
+	json.Unmarshal([]byte(r.Form.Get("data")), &tagNames)
+
 	http.Redirect(w, r, "/", http.StatusFound)
 }
 

@@ -69,6 +69,7 @@
 							<label class="uk-form-label" for="form-stacked-text">Tag</label>
 							<div class="uk-form-controls">
 								<div class="tag-container cf">
+									<input type="hidden" v-model="tags" name="tag">
 									<div v-for="(tag, index) in tags" :key="index" class="tag-label">
 										<span class="tag-label-text">${tag}</span>
 										<a href="#" class="tag-remove" @click.stop.prevent="remove(index)">

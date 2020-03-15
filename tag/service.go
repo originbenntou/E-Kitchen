@@ -72,3 +72,7 @@ func (s *TagService) FindTags(ctx context.Context, req *pbTag.FindTagsRequest) (
 
 	return &pbTag.FindTagsResponse{Name: tagNames}, nil
 }
+
+func (s *TagService) RegisterTag(ctx context.Context, req *pbTag.RegisterTagRequest) (*pbTag.RegisterTagResponse, error) {
+	return nil, nil
+}
